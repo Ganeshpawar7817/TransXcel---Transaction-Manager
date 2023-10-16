@@ -49,7 +49,7 @@ List<BankService> services=about.getServices();
 	
 	    <ul>
 	    <%for(BankService service:services){ %>
-	    <li><%=service %> </li>
+	    <li><%=service.getService() %> </li>
 	    <%} %>
 	    </ul>
 	    <marquee>Visit to our nearest branch for more information .....</marquee>

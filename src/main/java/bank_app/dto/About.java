@@ -1,15 +1,16 @@
 package bank_app.dto;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+
 
 @Entity
 public class About {
@@ -18,7 +19,7 @@ public class About {
 	int id;
 	@Lob
 	String info;
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	List<BankService> services;
 	@Lob
 	String marquee;

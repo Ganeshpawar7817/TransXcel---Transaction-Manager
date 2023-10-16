@@ -1,6 +1,7 @@
+<%@page import="bank_app.dto.BankService"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +21,7 @@
 			align-items: center;
 			margin: 0px;
 			background: #EEEEDD;
-			border-bottom-radius: 10px;
+			border-radius: 10px;
 		}
 		nav ul{
 			display: flex;
@@ -49,13 +50,17 @@
 			width: 100vw;
 		}
 		.imagediv{
-			height: 90vh;
+			height: 80vh;
 			width: 100vw;
 			overflow: hidden;
-			background-image: url("adminback2.jpg");
+		<%--	background-image: url("adminback2.jpg"); --%>
 			background-attachment: fixed;
 			background-repeat: no-repeat;
 			background-position: center ;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
 		}
 		.list-1 li a{
 			text-align: center;
@@ -86,9 +91,6 @@
 			margin-top: 0px;
 			padding-top: 10px;
 		}
-		#customer-section-list ul #firstitem{
-		margin-left: 20px
-		}
 		.other-li a{
 			color: mediumvioletred;
 			font-weight: bold;
@@ -98,62 +100,48 @@
 		nav ul li a:hover{
 			color: blue;
 		}
-		
-		
-		
-		.about-section{
-			height: inherit;
+		table{
 			border: 2px solid mediumvioletred;
-			border-radius: 5px;
-			margin-left: 100px;
+			background: lightcyan;
+			padding: 20px;
+			row-gap: 10px;
+			column-gap: 10px;
 		}
-		.about-section-list ul li a{
-		color: #ffcc5c;
+		td{
+			border: 1px solid pink;
+			margin: 10px 10px;
 		}
-		.about-section h3{
-			margin: 0px;
-			padding: 5px;
-			color: #4fb09f;
+		.id{
+			width: 30px;
 		}
-		.about-section-head{
+		input{
+			margin-right: 15px;			
+			margin-bottom: 10px;
 			text-align: center;
 		}
-		#about-section-head{
-			border-bottom: 2px solid pink;
-			border-radius: 20px;
-			text-align: center;
-			margin-bottom: 0px;
-			padding-bottom: 0px;
-		}
-		#about-section-list ul{
-			margin-top: 0px;
-			padding-top: 10px;
-		}
+
 	</style>
 </head>
 <body>
-<%
+<% 
+List<BankService> services=(List<BankService>)request.getAttribute("services"); 
 Object codeObj=request.getAttribute("code");
 if(codeObj!=null){
-	int code=(Integer)codeObj;
-	if(code==1111){
+int code=(Integer)codeObj;	
+if(code==111){
 %>
 <script type="text/javascript">
-alert("About Info Updated Successfully !!");
+      document.alert(" service updated successfully !! "");
 </script>
-<%}else if(code==2222){ %>
+
+<%
+}else if(code==222){
+%>
 <script type="text/javascript">
-alert("Service Updated Successfully !!");
-</script>
-<%}else if(code==3333){ %>
-<script type="text/javascript">
-alert("Service added Successfully !!");
-</script>
-<%}else if(code==4444) {%>
-<script type="text/javascript">
-alert("Service Deleted Successfully !!");
+       document.alert("service deleted successfully !!")
 </script>
 <%}} %>
+
 	<nav>
 		<ul class="list-1">
 			<li id="firstitem" class="other-li"><a href="adminhome">Home</a>
@@ -167,34 +155,50 @@ alert("Service Deleted Successfully !!");
 
 			<div id="customer-section-list">
 				<ul >
-			<li id="firstitem"><a href="viewbyid" onclick="close()">View By Id</a></li>
-			<li><a href="viewbyemail" onclick="close()">View By Email.</a></li>
-			<li><a href="showallusers" onclick="close()">View All</a> </li>
-			
+			<li><a href="viewbyid">View By Id</a> </li>
+
+			<li><a href="viewbyemail">View By AccNo.</a></li>
+			<li><a href="showallusers">View All</a></li>
+		
 		</ul>
 			</div>
 		</div>
-		<div class="about-section">
-		<div id="about-section-head" >
-		       <h3>About Section</h3>		
-		</div>
-		<div class="about-section-list">
 		<ul>
-			<li id="secitem" class="other-li"><a href="updateaboutform">Update About info</a>
-			</li>
-			<li id="secitem" class="other-li"><a href="addserviceform">Add Service</a>
-			</li><li id="secitem" class="other-li"><a href="updatesrvicesform">Update Services</a>
+			<li id="secitem" class="other-li"><a href="Home.html">About Us</a>
 			</li>
 		</ul>
-		</div>
-		
-		</div>
 	</nav>
-	<div class="imagediv"></div>
-<script type="text/javascript">
-	function close() {
-		window.colse();
-	}
-	</script>
+	<div class="imagediv">
+		<h1>Update Schemes</h1>
+		<table>
+			<tbody>
+			<%
+			for(BankService service:services){ 
+			%>
+				<tr>
+					<form action="updateservice" method="post">
+						<td>
+							<input type="number" name="id" value="<%= service.getId() %>" class="id" readonly="readonly">
+						</td>
+						<td>
+							<input type="text" name="service" value="<%=service.getService() %>">
+						</td>
+						<td>
+							<input type="submit" name="" value="Update" >
+						</td>
+				<%--		<td>
+							<a href="deleteservice?id=<%=service.getId() %>">
+								<button type="button">Delete</button>
+							</a>
+						</td>  --%>
+					</form>
+				</tr>
+				<%} %>
+			</tbody>
+		</table>
+
+	</div>
+	<h1>iside </h1>
+<h1><%=codeObj %> </h1>
 </body>
 </html>

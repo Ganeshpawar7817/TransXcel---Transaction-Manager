@@ -80,6 +80,9 @@
 			margin-top: 0px;
 			padding-top: 10px;
 		}
+		#customer-section-list ul #firstitem{
+		margin-left: 20px
+		}
 		.other-li a{
 			color: mediumvioletred;
 			font-weight: bold;

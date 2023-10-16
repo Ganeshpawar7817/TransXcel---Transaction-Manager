@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +19,7 @@
 			align-items: center;
 			margin: 0px;
 			background: #EEEEDD;
-			border-bottom-radius: 10px;
+			border-radius: 10px;
 		}
 		nav ul{
 			display: flex;
@@ -49,13 +48,16 @@
 			width: 100vw;
 		}
 		.imagediv{
-			height: 90vh;
+			height: 80vh;
 			width: 100vw;
 			overflow: hidden;
 			background-image: url("adminback2.jpg");
 			background-attachment: fixed;
 			background-repeat: no-repeat;
 			background-position: center ;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 		.list-1 li a{
 			text-align: center;
@@ -86,9 +88,6 @@
 			margin-top: 0px;
 			padding-top: 10px;
 		}
-		#customer-section-list ul #firstitem{
-		margin-left: 20px
-		}
 		.other-li a{
 			color: mediumvioletred;
 			font-weight: bold;
@@ -98,62 +97,21 @@
 		nav ul li a:hover{
 			color: blue;
 		}
-		
-		
-		
-		.about-section{
-			height: inherit;
-			border: 2px solid mediumvioletred;
-			border-radius: 5px;
-			margin-left: 100px;
-		}
-		.about-section-list ul li a{
-		color: #ffcc5c;
-		}
-		.about-section h3{
-			margin: 0px;
-			padding: 5px;
-			color: #4fb09f;
-		}
-		.about-section-head{
+		form{
+			background: floralwhite;
+			padding: 20px;
 			text-align: center;
 		}
-		#about-section-head{
-			border-bottom: 2px solid pink;
-			border-radius: 20px;
+		input{
 			text-align: center;
-			margin-bottom: 0px;
-			padding-bottom: 0px;
 		}
-		#about-section-list ul{
+		h2{
+			padding-top: 0px;
 			margin-top: 0px;
-			padding-top: 10px;
 		}
 	</style>
 </head>
 <body>
-<%
-Object codeObj=request.getAttribute("code");
-if(codeObj!=null){
-	int code=(Integer)codeObj;
-	if(code==1111){
-%>
-<script type="text/javascript">
-alert("About Info Updated Successfully !!");
-</script>
-<%}else if(code==2222){ %>
-<script type="text/javascript">
-alert("Service Updated Successfully !!");
-</script>
-<%}else if(code==3333){ %>
-<script type="text/javascript">
-alert("Service added Successfully !!");
-</script>
-<%}else if(code==4444) {%>
-<script type="text/javascript">
-alert("Service Deleted Successfully !!");
-</script>
-<%}} %>
 	<nav>
 		<ul class="list-1">
 			<li id="firstitem" class="other-li"><a href="adminhome">Home</a>
@@ -167,34 +125,26 @@ alert("Service Deleted Successfully !!");
 
 			<div id="customer-section-list">
 				<ul >
-			<li id="firstitem"><a href="viewbyid" onclick="close()">View By Id</a></li>
-			<li><a href="viewbyemail" onclick="close()">View By Email.</a></li>
-			<li><a href="showallusers" onclick="close()">View All</a> </li>
-			
+			<li><a href="viewbyid">View By Id</a> </li>
+
+			<li><a href="viewbyemail">View By Email</a></li>
+			<li><a href="showallusers">View All</a></li>
 		</ul>
 			</div>
 		</div>
-		<div class="about-section">
-		<div id="about-section-head" >
-		       <h3>About Section</h3>		
-		</div>
-		<div class="about-section-list">
 		<ul>
-			<li id="secitem" class="other-li"><a href="updateaboutform">Update About info</a>
-			</li>
-			<li id="secitem" class="other-li"><a href="addserviceform">Add Service</a>
-			</li><li id="secitem" class="other-li"><a href="updatesrvicesform">Update Services</a>
+			<li id="secitem" class="other-li"><a href="Home.html">About Us</a>
 			</li>
 		</ul>
-		</div>
-		
-		</div>
 	</nav>
-	<div class="imagediv"></div>
-<script type="text/javascript">
-	function close() {
-		window.colse();
-	}
-	</script>
+	<div class="imagediv">
+		<form action="addservice" method="post">
+			<h2 style="color: greenyellow; "> Service</h2>
+			 
+			<input type="text" name="service" placeholder="enter service"><br><br>
+			<input type="submit" name="">
+		</form>
+	</div>
+
 </body>
 </html>

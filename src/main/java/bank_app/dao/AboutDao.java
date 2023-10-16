@@ -22,9 +22,13 @@ public class AboutDao {
 		EntityTransaction entityTransaction=entityManager.getTransaction();
 		entityTransaction.begin();
 		Query query=entityManager.createQuery("FROM About");
+		System.out.println("dao before query exe.");
 		List<About> abouts=query.getResultList();
+		System.out.println("dao after query exe.");
 		About about=abouts.get(0);
+		System.out.println("dao after query exe. get(0)");
 		entityTransaction.commit();
+		System.out.println("dao after commit");
 		return about;
 	}
 	public About updateAbout(About about) {
@@ -52,5 +56,34 @@ public class AboutDao {
 		entityManager.persist(about);
 		entityTransaction.commit();
 		
+	}
+	
+	public List<BankService> getServices(){
+		About about=getAbout();
+		List<BankService> services=about.getServices();
+		return services;
+	}
+	public BankService getBankService(int id) {
+		EntityManager entityManager=getEntityManager();
+		EntityTransaction entityTransaction=entityManager.getTransaction();
+		entityTransaction.begin();
+		BankService bankService= entityManager.find(BankService.class, id);
+		entityTransaction.commit();
+		return bankService;
+	}
+	public void updateBankService(BankService bankService) {
+		EntityManager entityManager=getEntityManager();
+		EntityTransaction entityTransaction=entityManager.getTransaction();
+		entityTransaction.begin();
+		entityManager.merge(bankService);
+		entityTransaction.commit();
+	}
+	public void deleteBankService(int id) {
+		EntityManager entityManager=getEntityManager();
+		EntityTransaction entityTransaction=entityManager.getTransaction();
+		entityTransaction.begin();
+		BankService bankService=entityManager.find(BankService.class, id);
+		entityManager.remove(bankService);
+		entityTransaction.commit();
 	}
 }

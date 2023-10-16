@@ -1,6 +1,6 @@
+<%@page import="bank_app.dto.About"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,7 +20,7 @@
 			align-items: center;
 			margin: 0px;
 			background: #EEEEDD;
-			border-bottom-radius: 10px;
+			border-radius: 10px;
 		}
 		nav ul{
 			display: flex;
@@ -49,13 +49,16 @@
 			width: 100vw;
 		}
 		.imagediv{
-			height: 90vh;
+			height: 80vh;
 			width: 100vw;
 			overflow: hidden;
-			background-image: url("adminback2.jpg");
+/*			background-image: url("adminback2.jpg");*/
 			background-attachment: fixed;
 			background-repeat: no-repeat;
 			background-position: center ;
+			display: flex;
+			justify-content: center;
+			align-items: center;
 		}
 		.list-1 li a{
 			text-align: center;
@@ -86,9 +89,6 @@
 			margin-top: 0px;
 			padding-top: 10px;
 		}
-		#customer-section-list ul #firstitem{
-		margin-left: 20px
-		}
 		.other-li a{
 			color: mediumvioletred;
 			font-weight: bold;
@@ -98,62 +98,29 @@
 		nav ul li a:hover{
 			color: blue;
 		}
-		
-		
-		
-		.about-section{
-			height: inherit;
-			border: 2px solid mediumvioletred;
+		form{
+			border: 2px solid violet;
 			border-radius: 5px;
-			margin-left: 100px;
-		}
-		.about-section-list ul li a{
-		color: #ffcc5c;
-		}
-		.about-section h3{
-			margin: 0px;
-			padding: 5px;
-			color: #4fb09f;
-		}
-		.about-section-head{
+			padding: 20px;
+			background: ghostwhite;
 			text-align: center;
+			color: mediumvioletred;
 		}
-		#about-section-head{
-			border-bottom: 2px solid pink;
-			border-radius: 20px;
+		form textarea:hover{
+			background: lightcyan;
+
+		}
+		#submit:hover{
 			text-align: center;
-			margin-bottom: 0px;
-			padding-bottom: 0px;
+			background: blue;
 		}
-		#about-section-list ul{
-			margin-top: 0px;
-			padding-top: 10px;
-		}
+
 	</style>
 </head>
 <body>
 <%
-Object codeObj=request.getAttribute("code");
-if(codeObj!=null){
-	int code=(Integer)codeObj;
-	if(code==1111){
+About about=(About)request.getAttribute("about");
 %>
-<script type="text/javascript">
-alert("About Info Updated Successfully !!");
-</script>
-<%}else if(code==2222){ %>
-<script type="text/javascript">
-alert("Service Updated Successfully !!");
-</script>
-<%}else if(code==3333){ %>
-<script type="text/javascript">
-alert("Service added Successfully !!");
-</script>
-<%}else if(code==4444) {%>
-<script type="text/javascript">
-alert("Service Deleted Successfully !!");
-</script>
-<%}} %>
 	<nav>
 		<ul class="list-1">
 			<li id="firstitem" class="other-li"><a href="adminhome">Home</a>
@@ -167,34 +134,34 @@ alert("Service Deleted Successfully !!");
 
 			<div id="customer-section-list">
 				<ul >
-			<li id="firstitem"><a href="viewbyid" onclick="close()">View By Id</a></li>
-			<li><a href="viewbyemail" onclick="close()">View By Email.</a></li>
-			<li><a href="showallusers" onclick="close()">View All</a> </li>
-			
+			<li><a href="viewbyid">View By Id</a> </li>
+
+			<li><a href="viewbyemail">View By AccNo.</a></li>
+			<li><a href="shoallusers">View All</a></li>
+		
 		</ul>
 			</div>
 		</div>
-		<div class="about-section">
-		<div id="about-section-head" >
-		       <h3>About Section</h3>		
-		</div>
-		<div class="about-section-list">
 		<ul>
-			<li id="secitem" class="other-li"><a href="updateaboutform">Update About info</a>
-			</li>
-			<li id="secitem" class="other-li"><a href="addserviceform">Add Service</a>
-			</li><li id="secitem" class="other-li"><a href="updatesrvicesform">Update Services</a>
+			<li id="secitem" class="other-li"><a href="Home.html">About Us</a>
 			</li>
 		</ul>
-		</div>
-		
-		</div>
 	</nav>
-	<div class="imagediv"></div>
-<script type="text/javascript">
-	function close() {
-		window.colse();
-	}
-	</script>
+	<div class="imagediv">
+		<form action="updateabout" method="post">
+			<h2 style="color: rebeccapurple; text-decoration: underline; text-decoration-color: palevioletred ;">Update About page</h2>
+			Update Marquee :- <br>
+			<textarea rows="2" cols="30" name="marquee">
+				<%= about.getMarquee() %>
+			</textarea ><br><br>
+			Update About Us :- <br>
+			<textarea name="info" rows="7" cols="30">
+				<%= about.getInfo() %>
+			</textarea><br><br>
+			<input type="submit" value="update" style="color: blue;background: wheat; border: 1.5px solid green; border-radius: 4px;" id="submit">
+
+		</form>
+	</div>
+
 </body>
 </html>

@@ -70,8 +70,6 @@ public class UserService {
 			session.setAttribute("email", email);
 			session.setAttribute("pin", password);
 
-//			System.out.println("session " + session.getAttribute("email"));
-//			System.out.println("session " + session.getAttribute("pin"));
 		} else {
 			modelAndView.setViewName("UserLogin");
 			modelAndView.addObject("code", 0);
