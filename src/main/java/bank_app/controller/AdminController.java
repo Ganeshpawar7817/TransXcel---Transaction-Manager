@@ -1,5 +1,6 @@
 package bank_app.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,7 +14,8 @@ import bank_app.service.AdminService;
 
 @Controller
 public class AdminController {
-	AdminService adminService = new AdminService();
+	@Autowired
+	AdminService adminService;
 
 	@RequestMapping("/adminsignup")
 	public String adminSignUp() {

@@ -1,5 +1,6 @@
 package bank_app.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,7 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.springframework.stereotype.Component;
+
 @Entity
+@Component
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +25,7 @@ public class User {
 	String address;
 	double balance;
 	@OneToMany(cascade = CascadeType.ALL)
-	List<Transaction> transactionHistory;
+	List<Transaction> transactionHistory=new ArrayList<Transaction>();
 	
 	public int getId() {
 		return id;

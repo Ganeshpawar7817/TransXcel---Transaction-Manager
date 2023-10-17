@@ -11,8 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 
+import org.springframework.stereotype.Component;
+
 
 @Entity
+@Component
 public class About {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id

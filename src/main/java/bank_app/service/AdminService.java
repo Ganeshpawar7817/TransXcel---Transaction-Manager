@@ -1,17 +1,18 @@
 package bank_app.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 
-
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
 import bank_app.dao.AdminDao;
 import bank_app.dto.Admin;
-import bank_app.util.ResponseStructure;
 
+@Component
 public class AdminService {
 
-	AdminDao adminDao = new AdminDao();
-	ResponseStructure<Admin> responseStructure = new ResponseStructure<Admin>();
+	@Autowired
+	AdminDao adminDao;
 
 	public ModelAndView saveAdmin(Admin admin, String passcode2) {
 

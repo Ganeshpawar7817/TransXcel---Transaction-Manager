@@ -7,7 +7,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
 
 import org.springframework.web.servlet.ModelAndView;
@@ -17,10 +18,11 @@ import bank_app.dao.UserDao;
 import bank_app.dto.Transaction;
 import bank_app.dto.User;
 
-@Service
+@Component
 public class UserService {
 
-	UserDao userDao = new UserDao();
+	@Autowired
+	UserDao userDao;
 
 	public ModelAndView saveUser(User user, String pin2) {
 
@@ -82,11 +84,13 @@ public class UserService {
 	public Model viewAccount(Model model, HttpServletRequest request) {
 
 		HttpSession session = request.getSession();
+
 		String email = (String) session.getAttribute("email");
 		String pin = (String) session.getAttribute("pin");
 
 		User user = userDao.getUser(email, pin);
 		user.setPin("****");
+
 		model.addAttribute("user", user);
 
 		return model;
@@ -95,17 +99,18 @@ public class UserService {
 	public ModelAndView showBalance(HttpServletRequest request, String pin) {
 
 		ModelAndView modelAndView = new ModelAndView();
+
 		HttpSession session = request.getSession();
+
 		String email = (String) session.getAttribute("email");
 		String dbPin = (String) session.getAttribute("pin");
-		
+
 		if (!pin.equals(dbPin)) {
 			modelAndView.addObject("code", 0);
 			modelAndView.setViewName("CheckBalancePinCheck");
 		} else {
 			Double balance = userDao.getBalance(email, pin);
 
-			System.out.println("balance is >>" + balance);
 			modelAndView.addObject("code", 100);
 			modelAndView.addObject("balance", balance);
 			modelAndView.setViewName("UserHome");
@@ -118,7 +123,9 @@ public class UserService {
 
 	public ModelAndView viewUser(HttpServletRequest request) {
 		HttpSession session = request.getSession();
+
 		String email = (String) session.getAttribute("email");
+
 		User user = userDao.getUser(email);
 
 		ModelAndView modelAndView = new ModelAndView();
@@ -133,6 +140,7 @@ public class UserService {
 		ModelAndView modelAndView = new ModelAndView();
 
 		HttpSession session = request.getSession();
+
 		String dbPin = (String) session.getAttribute("pin");
 		String dbEmail = (String) session.getAttribute("email");
 
@@ -147,38 +155,50 @@ public class UserService {
 		User receiver = userDao.getUser(transaction.getReceiver().getEmail());
 		User user = userDao.getUser(dbEmail);
 
+		double amount = transaction.getAmount();
+
 		if (receiver == null) {
 			modelAndView.addObject("code", 10);
 			modelAndView.addObject("message", "Recievers Account not Available ??");
 			modelAndView.setViewName("TransferMoney");
-			System.out.println(receiver);
 			return modelAndView;
-		} else if (user.getBalance() < transaction.getAmount()) {
+		} else if (user.getBalance() < amount) {
 			modelAndView.addObject("code", 20);
 			modelAndView.addObject("message", "Insufficient Balance");
 			modelAndView.setViewName("TransferMoney");
 
 			return modelAndView;
+		} else if (amount < 1) {
+			modelAndView.addObject("code", 30);
+			modelAndView.addObject("message", "Enter Valid Amount ??");
+			modelAndView.setViewName("TransferMoney");
+
+			return modelAndView;
 		}
 
-		double amount = transaction.getAmount();
 		user.setBalance(user.getBalance() - amount);
 		receiver.setBalance(receiver.getBalance() + amount);
 
 		transaction.setDate(LocalDateTime.now());
 
 		List<Transaction> receiverTransactions = receiver.getTransactionHistory();
+
 		transaction.setType("credited");
 		transaction.setReceiver(user);
+
 		receiverTransactions.add(transaction);
 		receiver.setTransactionHistory(receiverTransactions);
+
 		userDao.updateUser(receiver);
 
 		List<Transaction> userTransactions = user.getTransactionHistory();
+
 		transaction.setType("debited");
 		transaction.setReceiver(receiver);
+
 		userTransactions.add(transaction);
 		user.setTransactionHistory(userTransactions);
+
 		userDao.updateUser(user);
 
 		modelAndView.addObject("code", 222);
@@ -188,20 +208,22 @@ public class UserService {
 		return modelAndView;
 	}
 
-	public ModelAndView updateAccoPage(HttpServletRequest request,String pin) {
+	public ModelAndView updateAccoPage(HttpServletRequest request, String pin) {
 
 		HttpSession session = request.getSession();
+
 		String email = (String) session.getAttribute("email");
 		String dbPin = (String) session.getAttribute("pin");
 
 		ModelAndView modelAndView = new ModelAndView();
-		if(!dbPin.equals(pin)) {
+		if (!dbPin.equals(pin)) {
 			modelAndView.addObject("code", 0);
 			modelAndView.setViewName("UpdateAccountCheckPin");
 		}
-		
+
 		else {
 			User user = userDao.getUser(email, pin);
+
 			modelAndView.addObject("user", user);
 			modelAndView.setViewName("UpdateUserAccount");
 		}
@@ -214,9 +236,10 @@ public class UserService {
 
 		User dbUser = userDao.getUser(user.getId());
 		user.setBalance(dbUser.getBalance());
-        user.setTransactionHistory(dbUser.getTransactionHistory());
-		
+		user.setTransactionHistory(dbUser.getTransactionHistory());
+
 		HttpSession session = request.getSession();
+
 		session.setAttribute("email", user.getEmail());
 		session.setAttribute("pin", user.getPin());
 
@@ -231,6 +254,7 @@ public class UserService {
 
 	public ModelAndView showUser(String cred, String data) {
 		ModelAndView modelAndView = new ModelAndView();
+
 		User user = null;
 		if (cred.equals("id")) {
 
@@ -246,6 +270,7 @@ public class UserService {
 
 		} else if (cred.equals("email")) {
 			String email = data;
+
 			user = userDao.getUser(email);
 			if (user == null) {
 				modelAndView.addObject("code", 0);
@@ -262,14 +287,17 @@ public class UserService {
 
 	public ModelAndView showAllUser() {
 		List<User> users = userDao.viewAll();
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("users", users);
 		modelAndView.setViewName("ShowAllUsers");
+
 		return modelAndView;
 	}
 
 	public ModelAndView updateUserRequest(int id) {
 		User user = userDao.getUser(id);
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("user", user);
 		modelAndView.setViewName("AdminUpdateUser");
@@ -283,6 +311,7 @@ public class UserService {
 		user.setBalance(dbUser.getBalance());
 		user.setPin(dbUser.getPin());
 		user.setTransactionHistory(dbUser.getTransactionHistory());
+
 		userDao.updateUser(user);
 
 		attributes.addAttribute("code", 555);
@@ -291,40 +320,22 @@ public class UserService {
 	}
 
 	public ModelAndView viewHistory(HttpServletRequest request) {
+
+		ModelAndView modelAndView = new ModelAndView();
+
+		// For Session Tracking
+		HttpSession session = request.getSession();
+		String email = (String) session.getAttribute("email");
+
+		// Getting transaction history from Dao Package >>
+		List<Transaction> transactions = userDao.getTransactionHistory(email);
 		
-		ModelAndView modelAndView=new ModelAndView();
-		
-		//For Session Tracking
-		HttpSession session=request.getSession();
-		String email=(String)session.getAttribute("email");
-		
-		//Getting transaction history from Dao Package >>
-		List<Transaction> transactions=userDao.getTransactionHistory(email);
-		
-		System.out.println("transaction before update >>");
-		System.out.println(transactions);
-		
-		// Removing unwanted Data of Receiver from transactions >>
-		for(Transaction transaction:transactions) {
-		     User receiver=transaction.getReceiver();
-		    if(receiver!=null) {
-		    	 receiver.setAddress(null);
-			     receiver.setBalance(0.0);
-			     receiver.setEmail(null);
-			     receiver.setPin(null);
-			     receiver.setTransactionHistory(null);
-			     receiver.setAge(0);
-		    }
-		     
-		}
-		System.out.println("transaction after update >>");
-		System.out.println(transactions);
-		
-		//setting up response >>
-		modelAndView.addObject("transactions",transactions);
+
+		// setting up response >>
+		modelAndView.addObject("transactions", transactions);
 		modelAndView.setViewName("TransactionHistory");
-		
+
 		return modelAndView;
-		
+
 	}
 }

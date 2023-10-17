@@ -1,10 +1,17 @@
 package bank_app.configuration;
 
-import org.springframework.context.annotation.ComponentScan;
+import javax.persistence.EntityManager;
+
+import javax.persistence.Persistence;
+
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@ComponentScan(basePackages = {"bank_app"})
 @Configuration
 public class BankConfig {
+	@Bean
+	public EntityManager getEntityManager() {
+		return Persistence.createEntityManagerFactory("Ganesh_Pawar").createEntityManager();
+	}
 
 }

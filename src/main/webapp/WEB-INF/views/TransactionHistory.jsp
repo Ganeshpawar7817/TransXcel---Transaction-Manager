@@ -137,7 +137,8 @@ List<Transaction> transactions=(List<Transaction>) request.getAttribute("transac
 
 			<tbody>
 				<% 
-	    	for(Transaction transaction:transactions){
+	    	for(int i=transactions.size()-1;i>=0;i--){
+	    		Transaction transaction=transactions.get(i);
 	    		
 	    		//fetching date
 	    		LocalDateTime dateTime=transaction.getDate();

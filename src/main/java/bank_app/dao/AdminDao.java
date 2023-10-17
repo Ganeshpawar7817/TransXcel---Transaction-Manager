@@ -1,24 +1,25 @@
 package bank_app.dao;
 
 import javax.persistence.EntityManager;
-
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 
-import javax.persistence.Persistence;
 import javax.persistence.Query;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import bank_app.dto.Admin;
 
+@Component
 public class AdminDao {
 
-	EntityManager getEntityManager() {
-		return Persistence.createEntityManagerFactory("Ganesh_Pawar").createEntityManager();
-	}
+	@Autowired
+	EntityManager entityManager;
 
 	public int saveAdmin(Admin admin) {
 		System.out.println("admin service before evrything");
-		EntityManager entityManager = getEntityManager();
+
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 
 		entityTransaction.begin();
@@ -32,7 +33,6 @@ public class AdminDao {
 
 	public int findAdmin(Admin admin) {
 
-		EntityManager entityManager = getEntityManager();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		Query query = entityManager.createQuery("SELECT id FROM Admin WHERE email=?1 AND passcode=?2");
@@ -47,7 +47,6 @@ public class AdminDao {
 
 	public boolean isEmailPresent(String email) {
 
-		EntityManager entityManager = getEntityManager();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 		entityTransaction.begin();
 		Query query = entityManager.createQuery("SELECT id FROM Admin WHERE email=?1");
@@ -66,7 +65,6 @@ public class AdminDao {
 
 	public boolean logInCheck(String email, String password) {
 
-		EntityManager entityManager = getEntityManager();
 		EntityTransaction entityTransaction = entityManager.getTransaction();
 
 		Query query = entityManager.createQuery("SELECT id FROM Admin WHERE email=?1 AND passcode=?2");
@@ -86,7 +84,5 @@ public class AdminDao {
 
 		return true;
 	}
-
-	
 
 }

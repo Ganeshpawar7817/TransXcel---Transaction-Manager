@@ -1,8 +1,8 @@
 package bank_app.controller;
 
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,11 +18,11 @@ import bank_app.service.UserService;
 
 @Controller
 public class UserController {
-	UserService userService = new UserService();
+	@Autowired
+	UserService userService;
 
-	
-	//User Pages Requests >>
-	
+	// User Pages Requests >>
+
 	@RequestMapping("/usersignup")
 	public String userSignUp() {
 		return "UserSignUp";
@@ -33,7 +33,7 @@ public class UserController {
 
 		return userService.saveUser(user, pin2);
 	}
-	
+
 	@RequestMapping("/userlogin")
 	public String userLogin() {
 		return "UserLogin";
@@ -46,12 +46,11 @@ public class UserController {
 		return userService.logInCheck(email, pin, request);
 
 	}
-	
+
 	@RequestMapping(path = "/userhome", method = RequestMethod.GET)
 	public String userHome() {
 		return "UserHome";
 	}
-
 
 	@RequestMapping("/checkbalancepage")
 	public String checkBalancePage() {
@@ -62,10 +61,13 @@ public class UserController {
 	public String transferMoney() {
 		return "TransferMoney";
 	}
-
-
-
 	
+	@RequestMapping(path = "/maketransaction", method = RequestMethod.POST)
+	public ModelAndView makeTransaction(@ModelAttribute Transaction transaction, @RequestParam String pin,
+			HttpServletRequest request) {
+		return userService.makeTransaction(transaction, pin, request);
+	}
+
 
 	@RequestMapping("/viewaccount")
 	public String viewAccount(Model model, HttpServletRequest request) {
@@ -90,20 +92,15 @@ public class UserController {
 		return userService.viewUser(request);
 	}
 
-	@RequestMapping(path = "/maketransaction", method = RequestMethod.POST)
-	public ModelAndView makeTransaction(@ModelAttribute Transaction transaction, @RequestParam String pin,
-			HttpServletRequest request) {
-		return userService.makeTransaction(transaction, pin, request);
-	}
-
+	
 	@RequestMapping("checkpinpage")
 	public String showUpdateAccountCheckPinPage() {
 		return "UpdateAccountCheckPin";
 	}
-	
+
 	@RequestMapping("/updateaccountcheckpin")
-	public ModelAndView updateAccount(HttpServletRequest request,@RequestParam String pin) {
-		return userService.updateAccoPage(request,pin);
+	public ModelAndView updateAccount(HttpServletRequest request, @RequestParam String pin) {
+		return userService.updateAccoPage(request, pin);
 	}
 
 	@RequestMapping(path = "/updatemyaccount", method = RequestMethod.POST)
@@ -118,7 +115,7 @@ public class UserController {
 		return "ShowUser";
 
 	}
-	
+
 	@RequestMapping("/showuser")
 	public ModelAndView viewUserById(@RequestParam(required = false) String data, @RequestParam("cred") String cred) {
 
@@ -126,15 +123,14 @@ public class UserController {
 		return userService.showUser(cred, data);
 
 	}
+
 	@RequestMapping("/viewhistory")
 	public ModelAndView viewHistory(HttpServletRequest request) {
 		return userService.viewHistory(request);
 	}
 
-	
+	// Admin Pages Requests >>
 
-	//Admin Pages Requests >>
-	
 	@RequestMapping("viewuserbyid")
 	public ModelAndView viewUserById(@RequestParam int id) {
 		return userService.showUser("id", id + "");
@@ -144,7 +140,7 @@ public class UserController {
 	public ModelAndView viewUserById(@RequestParam String email) {
 		return userService.showUser("email", email);
 	}
-	
+
 	@RequestMapping("/adminshowuser")
 	public String showUser() {
 		System.out.println("inside admin show user ");
@@ -156,22 +152,18 @@ public class UserController {
 	public ModelAndView viewAllUser() {
 		return userService.showAllUser();
 	}
-	
+
 	@RequestMapping("updateuserrequest")
 	public ModelAndView updateUserRequest(@RequestParam int id) {
 
 		return userService.updateUserRequest(id);
 
 	}
-	
+
 	@RequestMapping("adminupdateuserdata")
 	public String adminUpdateUserData(@ModelAttribute User user, RedirectAttributes attributes) {
 		attributes = userService.adminUpdateUserData(user, attributes);
 		return "redirect:showallusers";
 	}
 
-
-	
-	
-	
 }

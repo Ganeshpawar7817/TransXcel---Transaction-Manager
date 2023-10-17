@@ -39,7 +39,7 @@
 			color: goldenrod;
 		}
 		#firstitem{
-			padding: 0px 30px 0px 260px;
+			padding: 0px 30px 0px 160px;
 		}
 		img{
 			height: 93vh;

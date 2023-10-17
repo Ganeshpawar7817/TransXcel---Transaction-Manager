@@ -122,7 +122,7 @@ form a:hover{
 		Object codeObj=request.getAttribute("code");
 		if(codeObj!=null){
 		int code=(Integer)codeObj;
-		if(code==0||code==10||code==20){
+		if(code==0||code==10||code==20||code==30){
 		%>
 		<h2 id="msg"><%= (String) request.getAttribute("message") %> </h2>
 		<%}} %>
